@@ -1,0 +1,28 @@
+<polymer-element name="sudoku-cell">
+
+    <template>
+        <style>
+            .square-box{
+                position: relative;
+                width: 60px;
+                height: 60px;
+                overflow: hidden;
+                /*background: #4679BD;*/
+            }
+            .box-content{
+                font-size: x-large;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+                top: 20%;
+            }
+        </style>
+        <div id="cellButton" class="square-box" on-click="{{incrementCellValue}}" style="background:{{color}}">
+            <div class="box-content">{{cellValue}}</div>
+        </div>
+    </template>
+
+    <script type="application/dart" src="sudokuCell.dart"></script>
+
+</polymer-element>

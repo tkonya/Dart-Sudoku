@@ -1,0 +1,37 @@
+<polymer-element name="sudoku-block">
+
+    <template>
+        <style>
+            table {
+                border: none;
+                border-collapse: collapse;
+            }
+            td {
+                border: 1px solid black;
+                padding: 0;
+            }
+        </style>
+        <div>
+            <table>
+                <tr>
+                    <td><sudoku-cell id="{{cellA1}}"></sudoku-cell></td>
+                    <td><sudoku-cell id="{{cellA2}}"></sudoku-cell></td>
+                    <td><sudoku-cell id="{{cellA3}}"></sudoku-cell></td>
+                </tr>
+                <tr>
+                    <td><sudoku-cell id="{{cellB1}}"></sudoku-cell></td>
+                    <td><sudoku-cell id="{{cellB2}}"></sudoku-cell></td>
+                    <td><sudoku-cell id="{{cellB3}}"></sudoku-cell></td>
+                </tr>
+                <tr>
+                    <td><sudoku-cell id="{{cellC1}}"></sudoku-cell></td>
+                    <td><sudoku-cell id="{{cellC2}}"></sudoku-cell></td>
+                    <td><sudoku-cell id="{{cellC3}}"></sudoku-cell></td>
+                </tr>
+            </table>
+        </div>
+    </template>
+
+    <script type="application/dart" src="sudokuBlock.dart"></script>
+
+</polymer-element>

@@ -1,0 +1,44 @@
+<polymer-element name="sudoku-board">
+
+    <template>
+        <style>
+            table {
+                border: none;
+                border-collapse: collapse;
+            }
+            td {
+                border: 2px solid black;
+                padding: 0;
+            }
+        </style>
+        <div>
+
+            <h3>Dart Sudoku</h3>
+
+            <table>
+                <tr>
+                    <td><sudoku-block id="blockX1Y1" startX="1" startY="1"></sudoku-block></td>
+                    <td><sudoku-block id="blockX2Y1" startX="4" startY="1"></sudoku-block></td>
+                    <td><sudoku-block id="blockX3Y1" startX="7" startY="1"></sudoku-block></td>
+                </tr>
+                <tr>
+                    <td><sudoku-block id="blockX1Y2" startX="1" startY="4"></sudoku-block></td>
+                    <td><sudoku-block id="blockX2Y2" startX="4" startY="4"></sudoku-block></td>
+                    <td><sudoku-block id="blockX3Y2" startX="7" startY="4"></sudoku-block></td>
+                </tr>
+                <tr>
+                    <td><sudoku-block id="blockX1Y3" startX="1" startY="7"></sudoku-block></td>
+                    <td><sudoku-block id="blockX2Y3" startX="4" startY="7"></sudoku-block></td>
+                    <td><sudoku-block id="blockX3Y3" startX="7" startY="7"></sudoku-block></td>
+                </tr>
+            </table>
+
+            <button on-click="{{newGame}}">New Game</button>
+            <button on-click="{{testSet}}">Test Set</button>
+
+        </div>
+    </template>
+
+    <script type="application/dart" src="sudokuBoard.dart"></script>
+
+</polymer-element>
