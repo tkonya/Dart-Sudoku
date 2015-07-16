@@ -1,5 +1,4 @@
 library sudokuCellLib;
-import 'dart:html';
 import 'dart:math';
 import 'package:polymer/polymer.dart';
 
@@ -10,7 +9,11 @@ class SudokuCell extends PolymerElement {
   bool preset = false;
   bool colorsOn = true;
 
+  int x;
+  int y;
+
   SudokuCell.created() : super.created();
+
 
   void setRandomNumber() {
     final random = new Random();
@@ -23,18 +26,36 @@ class SudokuCell extends PolymerElement {
     colorCell();
   }
 
+  void setCoordinates(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  int getXCoordinate() {
+    return x;
+  }
+
+  int getYCoordinate() {
+    return y;
+  }
+
+  void clearCell() {
+    cellValue = null;
+    color = 'white';
+  }
+
   // takes a set of ints and sets cellValue to a number not in that set, returns the value it set
   int setRandomNumberNotIn(Set<int> valueSet) {
     if (valueSet.length > 8) {
-      print('There are already 9 or more values in this set, cannot set a random number not in this set');
+//      print('There are already 9 or more values in this set, cannot set a random number not in this set');
     } else {
-      print('Attempting to find value not in ' + valueSet.toString());
+//      print('Attempting to find value not in ' + valueSet.toString());
       final random = new Random();
       cellValue = 1 + random.nextInt(9);
       while (valueSet.contains(cellValue)) {
         cellValue = 1 + random.nextInt(9);
-        print('setting cell value to ' + cellValue.toString());
       }
+//      print('setting cell value to ' + cellValue.toString());
     }
     colorCell();
     return cellValue;
@@ -48,7 +69,7 @@ class SudokuCell extends PolymerElement {
     } else {
       cellValue++;
     }
-    print('Incrementing cell value to ' + cellValue.toString());
+//    print('Incrementing cell value to ' + cellValue.toString());
     colorCell();
   }
 

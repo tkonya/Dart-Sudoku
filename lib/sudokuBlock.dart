@@ -1,5 +1,4 @@
 library sudokuBlockLib;
-import 'dart:html';
 import 'package:polymer/polymer.dart';
 import 'sudokuCell.dart';
 
@@ -19,8 +18,8 @@ class SudokuBlock extends PolymerElement {
   String cellC3;
 
   SudokuBlock.created() : super.created() {
-    print('startX = ' + startX.toString());
-    print('startY = ' + startY.toString());
+
+    // set the ID so we can get the SudokuCell element easily
     cellA1 = 'x' + startX.toString() + 'y' + startY.toString();
     cellA2 = 'x' + (startX + 1).toString() + 'y' + startY.toString();
     cellA3 = 'x' + (startX + 2).toString() + 'y' + startY.toString();
@@ -30,6 +29,7 @@ class SudokuBlock extends PolymerElement {
     cellC1 = 'x' + startX.toString() + 'y' + (startY + 2).toString();
     cellC2 = 'x' + (startX + 1).toString() + 'y' + (startY + 2).toString();
     cellC3 = 'x' + (startX + 2).toString() + 'y' + (startY + 2).toString();
+
   }
 
   void generateRandomBlock() {
@@ -47,9 +47,10 @@ class SudokuBlock extends PolymerElement {
 
   }
 
-  int getCellValue(String id) {
-    return $[id].cellValue;
-  }
+//  int getCellValue(String id) {
+//    return $[id].cellValue;
+//  }
+  int getCellValue(String id) => $[id].cellValue;
 
   void setCellValue(String id, int value) {
     $[id].cellValue = value;
@@ -61,16 +62,7 @@ class SudokuBlock extends PolymerElement {
 
   // are there 9 unique numbers, and do they add up to 45?
   bool isBlockComplete() {
-    Set<int> numbersSet = new Set();
-    numbersSet.add($[cellA1].cellValue);
-    numbersSet.add($[cellA2].cellValue);
-    numbersSet.add($[cellA3].cellValue);
-    numbersSet.add($[cellB1].cellValue);
-    numbersSet.add($[cellB2].cellValue);
-    numbersSet.add($[cellB3].cellValue);
-    numbersSet.add($[cellC1].cellValue);
-    numbersSet.add($[cellC2].cellValue);
-    numbersSet.add($[cellC3].cellValue);
+    Set<int> numbersSet = getValuesPresent();
 
     int sum = 45;
     for (int number in numbersSet) {
@@ -82,6 +74,38 @@ class SudokuBlock extends PolymerElement {
     } else {
       return false;
     }
+  }
+
+  Set<int> getValuesPresent() {
+    Set<int> numbersSet = new Set();
+    if ($[cellA1].cellValue != null && $[cellA1].cellValue > 0 && $[cellA1].cellValue < 10) {
+      numbersSet.add($[cellA1].cellValue);
+    }
+    if ($[cellA2].cellValue != null && $[cellA2].cellValue > 0 && $[cellA2].cellValue < 10) {
+      numbersSet.add($[cellA2].cellValue);
+    }
+    if ($[cellA3].cellValue != null && $[cellA3].cellValue > 0 && $[cellA3].cellValue < 10) {
+      numbersSet.add($[cellA3].cellValue);
+    }
+    if ($[cellB1].cellValue != null && $[cellB1].cellValue > 0 && $[cellB1].cellValue < 10) {
+      numbersSet.add($[cellB1].cellValue);
+    }
+    if ($[cellB2].cellValue != null && $[cellB2].cellValue > 0 && $[cellB2].cellValue < 10) {
+      numbersSet.add($[cellB2].cellValue);
+    }
+    if ($[cellB3].cellValue != null && $[cellB3].cellValue > 0 && $[cellB3].cellValue < 10) {
+      numbersSet.add($[cellB3].cellValue);
+    }
+    if ($[cellC1].cellValue != null && $[cellC1].cellValue > 0 && $[cellC1].cellValue < 10) {
+      numbersSet.add($[cellC1].cellValue);
+    }
+    if ($[cellC2].cellValue != null && $[cellC2].cellValue > 0 && $[cellC2].cellValue < 10) {
+      numbersSet.add($[cellC2].cellValue);
+    }
+    if ($[cellC3].cellValue != null && $[cellC3].cellValue > 0 && $[cellC3].cellValue < 10) {
+      numbersSet.add($[cellC3].cellValue);
+    }
+    return numbersSet;
   }
 
 }
