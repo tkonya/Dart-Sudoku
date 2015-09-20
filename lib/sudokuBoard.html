@@ -2,6 +2,9 @@
 
     <template>
         <style>
+            title {
+                text-align: center;
+            }
             table {
                 border: none;
                 border-collapse: collapse;
@@ -13,7 +16,7 @@
         </style>
         <div>
 
-            <h3>Dart Sudoku</h3>
+            <h3 class="title">Polymer Dart Sudoku</h3>
 
             <table>
                 <tr>
@@ -34,7 +37,11 @@
             </table>
 
             <button on-click="{{newGame}}">New Game</button>
-            <button on-click="{{clearAllCells}}">Test Set</button>
+            <button on-click="{{reloadCandidateGame}}">Restart Game</button>
+            <!--<button on-click="{{clearAllCells}}">Clear All Cells</button>-->
+            <button on-click="{{reloadGame}}">Show Answers</button>
+            <button on-click="{{helpMe}}">Help Me</button>
+            <button on-click="{{checkAnswers}}">Check Answers</button>
 
         </div>
     </template>

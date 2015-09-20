@@ -1,8 +1,8 @@
 name: 'Dart_Sudoku_2'
 version: 0.0.1
 description: A web app built using polymer.dart.
-#author: <your name> <email@example.com>
-#homepage: https://www.example.com
+#author: Trevor Konya
+#homepage: http://trevorkonya.com
 environment:
   sdk: '>=1.0.0 <2.0.0'
 dependencies:

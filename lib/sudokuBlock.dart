@@ -108,4 +108,8 @@ class SudokuBlock extends PolymerElement {
     return numbersSet;
   }
 
+  bool isBlockValid() {
+    return getValuesPresent().length == 9;
+  }
+
 }

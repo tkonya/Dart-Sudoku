@@ -4,8 +4,10 @@ import 'package:polymer/polymer.dart';
 
 @CustomTag('sudoku-cell')
 class SudokuCell extends PolymerElement {
-  @observable int cellValue;
+  @observable int cellValue = null;
   @observable String color = 'white';
+  @observable String decoration = 'none';
+  @observable String weight = 'normal';
   bool preset = false;
   bool colorsOn = true;
 
@@ -22,8 +24,26 @@ class SudokuCell extends PolymerElement {
   }
 
   void setCellValue(int value) {
+    if (!preset) {
+      cellValue = value;
+      colorCell();
+    }
+  }
+
+  bool hasCellValue() {
+    return cellValue != null;
+  }
+
+  void setCellValuePreset(int value) {
     cellValue = value;
+    preset = true;
+    decoration = 'underline';
+    weight = 'bold';
     colorCell();
+  }
+
+  int getCellValue() {
+    return cellValue;
   }
 
   void setCoordinates(int x, int y) {
@@ -40,6 +60,9 @@ class SudokuCell extends PolymerElement {
   }
 
   void clearCell() {
+    preset = false;
+    decoration = 'none';
+    weight = 'normal';
     cellValue = null;
     color = 'white';
   }
@@ -61,16 +84,21 @@ class SudokuCell extends PolymerElement {
     return cellValue;
   }
 
-  void incrementCellValue() {
+  bool isPreset() {
+    return preset;
+  }
 
-    // set the value
-    if (cellValue == null || cellValue == 9) {
-      cellValue = 1;
-    } else {
-      cellValue++;
-    }
+  void incrementCellValue() {
+    if (!preset) {
+      // set the value
+      if (cellValue == null || cellValue == 9) {
+        cellValue = 1;
+      } else {
+        cellValue++;
+      }
 //    print('Incrementing cell value to ' + cellValue.toString());
-    colorCell();
+      colorCell();
+    }
   }
 
   void colorCell() {
@@ -104,6 +132,8 @@ class SudokuCell extends PolymerElement {
           color = '#4dd0e1';
           break;
       }
+    } else {
+      color = 'white';
     }
   }
 
