@@ -272,6 +272,7 @@ class SudokuBoard extends PolymerElement {
       }
 
     }
+    window.alert('Congratulations: you win!');
 
   }
 
