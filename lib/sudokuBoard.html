@@ -14,7 +14,6 @@
                 padding: 0;
             }
         </style>
-        <div>
 
             <h3 class="title">Polymer Dart Sudoku</h3>
 
@@ -36,12 +35,12 @@
                 </tr>
             </table>
 
-            <button on-click="{{newGame}}">New Game</button>
-            <button on-click="{{reloadCandidateGame}}">Restart Game</button>
-            <!--<button on-click="{{clearAllCells}}">Clear All Cells</button>-->
-            <button on-click="{{reloadGame}}">Show Answers</button>
-            <button on-click="{{helpMe}}">Help Me</button>
-            <button on-click="{{checkAnswers}}">Check Answers</button>
+            <button on-click="{{newGameBasedOnInput}}">New Game</button> Start a new game with <input type="number" min="1" max="64" value="{{inputDifficulty}}" bind-value="inputDifficulty" style="width:40px;"> blank cells<br>
+            <button on-click="{{reloadCandidateGame}}">Restart Game</button><br>
+            <button on-click="{{clearAllCells}}">Clear All Cells</button><br>
+            <button on-click="{{reloadGame}}">Show Answers</button><br>
+            <button on-click="{{helpMe}}">Help Me</button><br>
+            <button on-click="{{checkAnswers}}">Check Answers</button><br>
 
         </div>
     </template>

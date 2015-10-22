@@ -13,33 +13,45 @@ class SudokuBoard extends PolymerElement {
   Random random = new Random();
   var answers;
   var candidateGame;
+  @observable int inputDifficulty = 51;
+
+  final int easiestDifficulty = 40;
+  final int easyDifficulty = 30;
+  final int normalDifficulty = 25;
+  final int hardDifficulty = 21;
+  final int hardestDifficulty = 17;
 
   SudokuBoard.created() : super.created() {
     print('board created');
+    setCoordinates();
   }
 
   void newGame() {
-    newGameOfDifficulty(40);
+    newGameBasedOnBlankCells(40);
   }
 
-  void newGameOfDifficulty(int difficulty) {
-    // the passed in value difficulty should be an int from 0 to 81, this represents the number of cells that will be empty when the game starts
+  void newGameBasedOnInput() {
+    if (inputDifficulty > 81) {
+      window.alert('You cannot have more than 81 empty cells, since there are only 81 cells total');
+    } else if (inputDifficulty < 0) {
+      window.alert('Less than 0 empty cells does not make sense');
+    }
 
-    // set the coordinates of every cells so they know where they are
-    setCoordinates();
 
-    bool validBoard = generateValidBoard();
+    newGameBasedOnBlankCells(inputDifficulty);
+  }
 
-    if (!validBoard) {
-      window.alert('Failed to generate a game in ' + tries.toString() + ' tries, please try again');
-    } else {
+  // the passed in value difficulty should be an int from 0 to 81, this represents the number of cells that will be empty when the game starts
+  void newGameBasedOnBlankCells(int difficulty) {
+
+    if (generateValidBoard()) {
       // save the answers, we'll probably need to reload them repeatedly
       saveAnswers();
 
       bool solvablePuzzle = false;
       int tries = 0;
       while (!solvablePuzzle && tries < triesToCreateValidGame) {
-        print('Trying to create solvable game ' + tries.toString());
+        print('Trying to create solvable game, attempt ' + (tries + 1).toString() + ' out of ' + triesToCreateValidGame.toString());
         reloadGame();
         blankCells(difficulty);
         saveCandidateGame();
@@ -53,15 +65,48 @@ class SudokuBoard extends PolymerElement {
         reloadCandidateGame();
       }
 
-
     }
 
   }
 
   // generates a game where there are knownSolutions number of cells where there is a definite solution
-  void newGameOfKnownSolutions(int knownSolutions) {
+  void newGameBasedOnInitialKnownSolutions(int knownSolutionsTarget) {
+
+    if (generateValidBoard()) {
+      saveAnswers();
+
+      List<SudokuCell> allCells = getAllCells();
+      allCells.shuffle();
+
+      int initialNumberToClear = 9;
+
+      for (SudokuCell sudokuCell in allCells) {
+
+        // clear the initial number of cells, no need to do anything else until we do this
+        if (initialNumberToClear > 0) {
+          sudokuCell.clearCell();
+          --initialNumberToClear;
+          continue;
+        }
 
 
+
+        // check if the board is still solvable
+        saveCandidateGame();
+        bool boardSolvable = attemptToSolveBoard();
+        if (boardSolvable) {
+          reloadCandidateGame();
+
+
+
+        } else {
+          break;
+        }
+
+      }
+
+
+    }
 
   }
 
@@ -70,12 +115,17 @@ class SudokuBoard extends PolymerElement {
     bool validBoard = false;
     int tries = 0;
     while (tries < triesToGenerateGame) {
-      print('Attempting to generate valid completed board ' + tries.toString());
+      print('Attempting to generate valid completed board, attempt ' + (tries + 1).toString() + ' out of ' + triesToGenerateGame.toString());
       validBoard = generateGame();
       if (validBoard) {
         break;
       }
       ++tries;
+    }
+    if (!validBoard) {
+      window.alert('Failed to generate a game in ' + tries.toString() + ' tries, please try again');
+    } else {
+      print('Generated valid complete board in ' + (tries + 1).toString() + ' tries');
     }
     return validBoard;
   }
@@ -98,7 +148,7 @@ class SudokuBoard extends PolymerElement {
         possibleValues.shuffle();
         cell.setCellValue(possibleValues[0]);
       } else {
-        print('There are no possible values for the cell at (' + cell.getXCoordinate().toString() + ', ' + cell.getYCoordinate().toString() + ')');
+//        print('There are no possible values for the cell at (' + cell.getXCoordinate().toString() + ', ' + cell.getYCoordinate().toString() + ')');
         return false;
       }
     }
@@ -244,16 +294,6 @@ class SudokuBoard extends PolymerElement {
 
   void checkAnswers() {
 
-    // check blocks
-//    List<SudokuBlock> allBlocks = getAllBlocks();
-//    int blockErrors = 0;
-//    for (SudokuBlock block in allBlocks) {
-//      if (!block.isBlockValid()) {
-//        ++blockErrors;
-//      }
-//    }
-
-
   // cycle through every cell, 1 incorrect cell will cause many other to be read as incorrect so do not output number wrong, just say that it's wrong
     List<SudokuCell> allCells = getAllCells();
     for (SudokuCell cell in allCells) {
@@ -280,12 +320,19 @@ class SudokuBoard extends PolymerElement {
   void helpMe() {
     List<SudokuCell> emptyCells = getEmptyCells();
     if (emptyCells.length > 0) {
+
+      // first just try to solve 100% known blocks
       emptyCells.shuffle();
       for (SudokuCell cell in emptyCells) {
         if (attemptToSolveCell(cell)) {
           break;
         }
       }
+      console.log('could not solve any empty cells simply');
+
+      // now look x moves ahead
+
+
     }
   }
 
@@ -312,7 +359,6 @@ class SudokuBoard extends PolymerElement {
   }
 
   List<int> getPossibleCellValues(int x, int y) {
-
     List<int> possibleValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     Set<int> blockValues = getBlock(x, y).getValuesPresent();
@@ -327,7 +373,6 @@ class SudokuBoard extends PolymerElement {
     }
 
     return possibleValues;
-
   }
 
   bool checkCellAnswer(int x, int y) {
@@ -365,7 +410,6 @@ class SudokuBoard extends PolymerElement {
     } else {
       return false;
     }
-
   }
 
   bool attemptToSolveCell(SudokuCell cell) {
@@ -379,13 +423,12 @@ class SudokuBoard extends PolymerElement {
 
   bool attemptToSolveBoard() {
     print('Attempting to solve game');
-    var attemptRounds = 100; // number of rounds to attempt
     List<SudokuCell> emptyCells = getEmptyCells();
-//    print('Found ' + emptyCells.length.toString() + ' empty cells to solve for');
     emptyCells.shuffle();
     int unsolvedCells = emptyCells.length;
 
-    for (var i = 0; i < attemptRounds; ++i) {
+    int i;
+    for (i = 0; i < emptyCells.length; ++i) {
 
       bool changeMadeThisRound = false;
       for (SudokuCell cell in emptyCells) {
@@ -411,15 +454,29 @@ class SudokuBoard extends PolymerElement {
 
     }
 
-    print('Was not able to solve every cell in ' + attemptRounds.toString() + ' rounds. Still have ' + unsolvedCells.toString() + ' unsolved cells.');
+    print('Was not able to solve every cell in ' + i.toString() + ' rounds. Still have ' + unsolvedCells.toString() + ' unsolved cells.');
 
     return false;
   }
 
-  void blankCells(int difficulty) {
+  int countSolvableCells() {
+    List<SudokuCell> cells = getAllCells();
+    int solvable = 0;
+
+    for (SudokuCell cell in cells) {
+      if (!cell.hasCellValue() && getPossibleCellValues(cell.getXCoordinate(), cell.getYCoordinate()).length == 1) {
+        ++solvable;
+      }
+    }
+
+    return solvable;
+  }
+
+  // this method just blanks cells completely randomly
+  void blankCells(int numberToBlank) {
     int numberBlanked = 0;
 
-    while (numberBlanked < difficulty) {
+    while (numberBlanked < numberToBlank) {
       int x = getRandom();
       int y = getRandom();
       if (getCell(x, y).getCellValue() != null) {
@@ -427,6 +484,9 @@ class SudokuBoard extends PolymerElement {
         ++numberBlanked;
       }
     }
+  }
+
+  void smartBlankCells(int difficulty) {
 
   }
 
